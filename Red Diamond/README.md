@@ -168,7 +168,7 @@ Manual enumeration of the web server is actually simple. It involves reviewing c
 A web service is often the most common service you will find running on a machine. As such, there are many ways to enumerate a web server. I am going to highlight three simple methods I use to enumerate a web service: Nikto, Gobuster, and Manual.
 
 ##### Smbclient
-Smbclient is a tool that enables one to interact with a SMB server. The interface is very similar to ftp (get and put commands are the same) that allows one to view, download, and upload to a SMB share. To determine what shares are accessible I run the following command.
+[Smbclient](https://www.samba.org/samba/docs/current/man-html/smbclient.1.html) is a tool that enables one to interact with a SMB server. The interface is very similar to ftp (get and put commands are the same) that allows one to view, download, and upload to a SMB share. To determine what shares are accessible I run the following command.
 ```
 smbclient -L \\\\X.X.X.X
 ```
@@ -189,8 +189,118 @@ The * is a wildcard that essentially means run every smb vulnerability script on
 
 After the enumeration is complete and I have identified the vulnerability, I proceed to develop/obtain the exploit.
 
+### Service MindMap
+![](images/mindmap.png)
+
 ## Weaponization
+In the Weaponization phase, you develop your exploit for the target. This can either be done by writing your own code or using someone else's. I don't have to go into detail about writing your own exploit (self-explanatory) but when using a publicly-available exploit (from Exploit-DB or somewhere on Google), some configurations may have to be made. For example, say there's an exploit for Apache written in python, before I even try to download and run the exploit I review the source code. I identify whether there are any dependencies I need to install or if the IP/Port/URL is hardcoded in. If this is the case I modify the exploit accordingly after I download it. If I use a Metasploit module, I list the options with `show options` and set the required options.
+
+If the exploit initiates a reverse shell, I need to have a [netcat](https://www.sans.org/security-resources/sec560/netcat_cheat_sheet_v1.pdf) listener running. I like to encompass my netcat listener with [rlwrap](https://github.com/hanslub42/rlwrap) so that my netcat connection will function like a normal shell. Normally you wont be able to edit your command or quickly use a previous one without deleting the appropriate portion of the command.
+
+If the exploit requires a windows executable as a reverse shell or some shellcode, I generate these with [msfvenom](https://www.offensive-security.com/metasploit-unleashed/msfvenom/). I like msfvenom since it allows me to create either a meterpreter payload, a normal tcp connection, or shell code to be used in a python exploit.
+
+With this complete, I now have an exploit that is ready to be used
 
 ## Exploitation
+In the Exploitation phase, this is honestly the most straightforward phase. Run the exploit. If it's successful, I'm now in the privilege escalation phase. If it fails, I revert back to the Weaponization phase and try to identify the error.
+
+**__NOTE__**: Multiple unsuccessful exploits may indicate the service has been patched for that vulnerability, thus I will revert back to the Reconnaissance phase to find another vulnerability.
 
 ## Privilege Escalation
+In the Privilege Escalation phase, I seek to obtain root privileges. To do this, first I identify what operating system I'm on (This is usually indicated from the nmap scan). Below I will detail the steps I take to escalate privileges on a Linux host and a Windows host.
+
+### Linux
+When I try to escalate privileges on a Linux host, I follow this checklist:
+1. Kernel Exploit
+2. Sudo Privileges
+3. Processes ran as root
+4. Root owned files
+
+#### Kernel Exploit
+A kernel exploit is the holy grail for privilege escalation. It requires little work and is usually identifiable within seconds. To do this, I first check the system kernel with `uname -a`. This command outputs the kernel version along with some information about its architecture (x64 or x86_x64). Next I use Exploit-DB to identify if the kernel has any exploits. If it does, I download, compile, transfer the exploit to the machine, and run. If all goes well i will have a root shell, otherwise I can either try another exploit (if applicable), or move on to the next item in my checklist.
+
+#### Sudo
+Sudo privileges are my second favorite option for escalating privileges. If I have a user shell, not as a service (i.e. www-data), then I can check these privileges with the following command `sudo -l`. This will list out what privileges this user has in the context of sudo.
+
+For example, lets say I have a shell as randomuser, check its sudo privileges, and get the following output:
+```
+randomuser  ALL=(ALL:ALL) ALL
+```
+To clarify what this means:
+* The first ALL is the users allowed to use the sudo command. 
+* The second ALL defines the hosts (servers) on which sudo can be employed. 
+* The third ALL is the user you are running the command as.
+* The last ALL defines the commands allowed.
+In this scenario, randomuser is essentially root. I can change just about anything in the system to fit my needs without actually having a root shell.
+
+Now lets say I run `sudo -l` and see this in the output:
+```
+(root) NOPASSWD: /sbin/reboot
+```
+This indicates that I am able to execute the reboot command as root, without a password. This is especially handy if there's a service that starts upon reboot that I can hijack.
+
+Now let's say I see this in the output of `sudo -l`:
+```
+/usr/bin/sudo /usr/bin/journalctl -n99 -fake.service | /usr/bin/cat
+```
+Here the user will execute the journalctl service as root. This can be exploited via a [GTFOBin](https://gtfobins.github.io/gtfobins/journalctl/) to get a root shell.
+
+#### Root Processes
+Hijacking/Exploiting root processes is a common vector for privilege escalation. To do this, I simply have to identify the process running as root. This can be done with the following command:
+```
+ps aux | grep root
+```
+From this output, I can identify root services and research them to determine if there are known exploits.
+
+#### Root Files
+Hijacking a root-ran file is something I discovered recently. Essentially, I look for executable files owned by root, that have global write [permissions](https://www.guru99.com/file-permissions.html). If I find one, I simply inject a reverse shell into the script and run it. If successful, I have obtained a shell as the root user.
+
+__NOTE__: You can also use [LinEnum](https://github.com/rebootuser/LinEnum) or [linPEAS](https://github.com/carlospolop/privilege-escalation-awesome-scripts-suite/tree/master/linPEAS) to automate enumeration on the machine. I have included copies in this repository
+
+### Windows
+Windows Privilege Escalation is honestly my weakest skill, yet it is very similar to Linux. To elevate my privileges, I follow the following checklist:
+1. Kernel Exploit
+2. User Privileges
+3. Processes ran as SYSTEM
+4. Unquoted Service Paths
+
+#### Kernel Exploit
+A kernel exploit is the holy grail for privilege escalation. It requires little work and is usually identifiable within seconds. To do this, I first check the system kernel with `systeminfo`. This command outputs the OS version along with some information about its architecture. Next I use Exploit-DB to identify if the kernel has any exploits. If it does, I download, compile, transfer the exploit to the machine, and run. If all goes well i will have a SYSTEM shell, otherwise I can either try another exploit (if applicable), or move on to the next item in my checklist.
+
+#### User
+User privileges on a windows machine are a common vector to elevate privileges. Why? Security researchers identified a number of vulnerabilities with certain privileges and made the exploits public. To figure out if the machine I'm on has any user privilege vulnerabilities, I run:
+```
+whoami /all
+```
+and start Googling.
+
+__Note__: If you're on a Windows XP machine, whoami is an invalid command since it was developed after Windows XP. Just run winPEAS to bypass this.
+
+#### SYSTEM Processes
+This is very similar to Linux, the goal here is to find processes running as SYSTEM, and try and hijack them with a reverse shell. One command that will determine SYSTEM processes:
+```
+tasklist /v /fi "username eq system"
+```
+From here I want to check the permissions of the processes binaries:
+```cmd
+for /f "tokens=2 delims='='" %%x in ('wmic process list full^|find /i "executablepath"^|find /i /v "system32"^|find ":"') do (
+	for /f eol^=^"^ delims^=^" %%z in ('echo %%x') do (
+		icacls "%%z" 
+2>nul | findstr /i "(F) (M) (W) :\\" | findstr /i ":\\ everyone authenticated users todos %username%" && echo.
+	)
+)
+```
+Lastly, I want to check the permissions of the folders of the binaries, to see if it's vulnerable to DLL hijacking
+```cmd
+for /f "tokens=2 delims='='" %%x in ('wmic process list full^|find /i "executablepath"^|find /i /v 
+"system32"^|find ":"') do for /f eol^=^"^ delims^=^" %%y in ('echo %%x') do (
+	icacls "%%~dpy\" 2>nul | findstr /i "(F) (M) (W) :\\" | findstr /i ":\\ everyone authenticated users 
+todos %username%" && echo.
+)
+```
+#### Unquoted Service Paths
+This is an interesting vulnerability I learned about not too long ago. In a nutshell, if the path to an executable is not encompased in quotes (i.e C:\Program Files\Some.exe instead of "C:\Program Files\Some.exe") Windows will try to execute the first executable it finds as it moves down the path. This essentially means I can throw a reverse shell in the path, restart the service and I should get a callback. To identify vulnerable services, run:
+```cmd
+wmic service get name,displayname,pathname,startmode | findstr /i /v "C:\\Windows\\system32\\" |findstr /i /v """
+```
+__NOTE__: You can also use [winPEAS](https://github.com/carlospolop/privilege-escalation-awesome-scripts-suite/tree/master/winPEAS) to automate enumeration on the machine.
