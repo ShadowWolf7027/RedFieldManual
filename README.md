@@ -8,7 +8,7 @@ __DISCLAIMER__: The content in the repo is my own methodology. Please only use o
 
 ## How to navigate
 Within this repository, I will discuss two different ways to define your methodology:
-* Cyber Kill Chain
+* Cyber Kill Chain (Not started)
     * 7 Step specific process
-* The Red Diamond
+* The Red Diamond (Draft Complete)
     * 4 Phase process
