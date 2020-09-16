@@ -12,8 +12,3 @@ Within this repository, I will discuss two different ways to define your methodo
     * 7 Step specific process
 * The Red Diamond (Draft Complete)
     * 4 Phase process
-
-## TO-DO
-* Add detail to Red Diamond
-    * Example workflow through Metasploitable 2
-* Start Cyber Kill Chain
