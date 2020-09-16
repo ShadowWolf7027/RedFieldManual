@@ -198,5 +198,5 @@ find . -xdev -perm /400
 ./usr/lib/openssh/ssh-keysign
 ./usr/lib/snapd/snap-confine
 ```
-Researching these binaries for vulnerabilities I found that jjs was vulnerable to a [GTFOBin](https://gtfobins.github.io/gtfobins/jjs/). I tried the shell vulnerability to get a root shell, but ended up crashing my server. Realizing that jjs will run as root and has a file read vulnerability, I can simply use it to read the root key file!
+Researching these binaries for vulnerabilities I found that jjs was vulnerable to a [GTFOBin](https://gtfobins.github.io/gtfobins/jjs/). I tried the shell vulnerability to get a root shell, but ended up crashing my ssh connection. Realizing that jjs will run as root and has a file read vulnerability, I can simply use it to read the root key file!
 ![](images/mango/root.png)
