@@ -7,6 +7,6 @@ Here I will provide writeups on Hackthebox (HTB) machines that I exploited. Thes
 * Traverxec (Writeup in-progress)
 
 ## Windows
-* Monteverde
-* Sauna
-* Remote
+* Monteverde (Writeup in-progress)
+* Sauna (Writeup in-progress)
+* Remote (Writeup in-progress)
