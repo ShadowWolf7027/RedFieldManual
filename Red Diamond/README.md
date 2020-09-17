@@ -165,7 +165,7 @@ I want to highlight two flags I used, -x and -s. Web servers usually run php as 
 Manual enumeration of the web server is actually simple. It involves reviewing cookies, the source-code of the page and interacting with the web page. To review cookies simply get a cookie editor add-on; these are available on just about every browser. To review the source code right click on the web page and select either view source or inspect element (interactive code viewer). I have found new directories, files, credentials, and even a SQL injection vulnerability just by reviewing the source code. Lastly if applicable, I interact with the service. For example, if it's a blog I review all entries to see if any confidential information is reviewed that was not found with scripts.
 
 #### Port 139/445 (SMB)
-A web service is often the most common service you will find running on a machine. As such, there are many ways to enumerate a web server. I am going to highlight three simple methods I use to enumerate a web service: Nikto, Gobuster, and Manual.
+A SMB server is one of the most common services you will find on a Windows box. Linux has them too, but not as often. SMB in a nutshell, is a communication protocol that enables shared access to things such as files, printers, etc. The main way I enumerate SMB servers is with Smbclient.
 
 ##### Smbclient
 [Smbclient](https://www.samba.org/samba/docs/current/man-html/smbclient.1.html) is a tool that enables one to interact with a SMB server. The interface is very similar to ftp (get and put commands are the same) that allows one to view, download, and upload to a SMB share. To determine what shares are accessible I run the following command.
@@ -179,6 +179,8 @@ After I identify the share I want to target, I connect to the share with:
 smbclient \\\\X.X.X.X\\{share}
 ```
 From here I turn recursive listing on with `recurse on` and the run `ls` to view everything in the share. From here I determine whether I want to download some files with `get` or upload a reverse shell with `put`.
+
+**NOTE**: If you prefer an automated version, use [Smbmap](https://tools.kali.org/information-gathering/smbmap)
 
 ##### NMAP
 As I stated previously, nmap comes with the ability to scan for vulnerabilities a service may have. SMB is one of the easier services to test with this method since it is vulnerable to a plethora of things. To do this I simply run:
