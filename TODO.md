@@ -1,7 +1,6 @@
 # TO-DO
 * Example workflows
     * Linux
-        * Mango
         * Open Admin
         * Traverxec
     * Windows
@@ -10,4 +9,6 @@
         * Remote
 * Detail each service more
 * Detail tools used
+* Linux Privilege Escalation checklist (Much more detail)
+* Windows Privilege Escalation checklist (Much more detail)
 * Start Cyber Kill Chain
