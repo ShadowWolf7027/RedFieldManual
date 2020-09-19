@@ -103,7 +103,7 @@ After this command finishes, when you echo the $ports variable you should see an
 ```
 21,22,80
 ```
-Wit the ports in this format, I am able to simply add them to the primary port scan:
+With the ports in this format, I am able to simply add them to the primary port scan:
 ```
 nmap -p $ports -sV -sC <TARGET> -oA initial
 ```
