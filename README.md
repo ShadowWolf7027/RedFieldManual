@@ -15,6 +15,6 @@ Within this repository, I will discuss two different ways to define your methodo
 * The Red Diamond (Draft Complete)
     * 4 Phase process
 * Tools
-    * Common scripts used in a pentest
+    * Common scripts and commands used in a pentest
 * Checklists
     * Detailed Checklists
