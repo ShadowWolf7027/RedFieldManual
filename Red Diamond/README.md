@@ -149,7 +149,7 @@ Check [here](https://tools.kali.org/information-gathering/nikto) for command-lin
 ##### Gobuster
 [Gobuster](https://github.com/OJ/gobuster) is a tool used to brute force directories, files, subdomains, and virtual hosts on a web server. I like using this tool since it is not resource heavy and I can brute force folders and files with various extensions simultaneously. I run gobuster with the following parameters (example on a web server located on port 80):
 ```
-gobuster dir -u http://X.X.X.X -w /usr/share/wordlists/dirb/common.txt -x php,txt -t 50 -s 200,301 -o go.txt
+gobuster dir -u http://X.X.X.X -w /usr/share/wordlists/dirb/common.txt -x php,txt -t 50 -s 200,301,403 -o go.txt
 ```
 ```
 -u  URL
@@ -159,7 +159,7 @@ gobuster dir -u http://X.X.X.X -w /usr/share/wordlists/dirb/common.txt -x php,tx
 -s  Only show responses with these status codes
 -o  Output file
 ```
-I want to highlight two flags I used, -x and -s. Web servers usually run php as the backend and contain php and txt files. I have also encountered aspx and html files but those are not as common. When brute-forcing directories I am only interested in those with 200 and 301 status codes. A 200 status code indicates that the resource is available and present at that exact address. A 301 code indicates a redirection, common when a valid directory is found.
+I want to highlight two flags I used, -x and -s. Web servers usually run php as the backend and contain php and txt files. I have also encountered aspx and html files but those are not as common. When brute-forcing directories I am only interested in those with 200 and 301 status codes. A 200 status code indicates that the resource is available and present at that exact address. A 301 code indicates a redirection, common when a valid directory is found. A 403 code indicates the resource is forbidden from being accessed, maybe interesting if it's a cgi-bin or something else.
 
 ##### Manual
 Manual enumeration of the web server is actually simple. It involves reviewing cookies, the source-code of the page and interacting with the web page. To review cookies simply get a cookie editor add-on; these are available on just about every browser. To review the source code right click on the web page and select either view source or inspect element (interactive code viewer). I have found new directories, files, credentials, and even a SQL injection vulnerability just by reviewing the source code. Lastly if applicable, I interact with the service. For example, if it's a blog I review all entries to see if any confidential information is reviewed that was not found with scripts.
