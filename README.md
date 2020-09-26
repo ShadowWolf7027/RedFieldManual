@@ -18,3 +18,4 @@ Within this repository, I will discuss two different ways to define your methodo
     * Common scripts and commands used in a pentest
 * Checklists
     * Detailed Checklists
+* Cheatsheets
