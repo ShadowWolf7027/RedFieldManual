@@ -1,7 +1,7 @@
 # Spawn TTY Shell
 
 ```python
-python -c 'import pty; pty.spawn("/bin/sh")'
+python -c 'import pty; pty.spawn("/bin/bash")'
 ```
 ```bash
 echo os.system('/bin/bash')
