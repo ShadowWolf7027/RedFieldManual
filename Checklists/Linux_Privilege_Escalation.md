@@ -1,6 +1,6 @@
 # Linux Privilege Escalation
 
-Condensed version of the checklist found on [Hacktricks](https://book.hacktricks.xyz/linux-unix/privilege-escalation). There is a plethora of ways to escalate privileges but I'm going to list the most common ways to escalate privileges (In my experience) 
+Condensed version of the checklists found on [Hacktricks](https://book.hacktricks.xyz/linux-unix/privilege-escalation) and [Sushant747](https://sushant747.gitbooks.io/total-oscp-guide/content/privilege_escalation_-_linux.html). There is a plethora of ways to escalate privileges but I'm going to list the most common ways to escalate privileges (In my experience) 
 
 ## System Information
 
@@ -43,6 +43,35 @@ rpm -qa #Centos-based
 ### Running processes
 ```
 ps aux
+```
+
+### Inside Service
+```
+netstat -anlp
+netstat -ano
+```
+
+### Cronjobs
+Check for anything that is owned by a more privileged user but writable by you
+```
+crontab -l
+ls -alh /var/spool/cron
+ls -al /etc/ | grep cron
+ls -al /etc/cron*
+cat /etc/cron*
+cat /etc/at.allow
+cat /etc/at.deny
+cat /etc/cron.allow
+cat /etc/cron.deny
+cat /etc/crontab
+cat /etc/anacrontab
+cat /var/spool/cron/crontabs/root
+```
+
+### Unmounted filesystems
+```
+mount -l
+cat /etc/fstab
 ```
 
 ## Users
