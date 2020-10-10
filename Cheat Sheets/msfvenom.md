@@ -2,7 +2,7 @@
 
 ## List payloads
 ```bash
-msfvenom -l
+msfvenom -l payloads # lists payloads
 msfvenom -l encoders # lists encoders
 ```
 ## Useful parameters
