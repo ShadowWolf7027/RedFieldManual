@@ -1,5 +1,18 @@
 # Spawn TTY Shell
 
+Create fully interactive shell from nc
+```bash
+nc -lnvp 4444
+
+python -c 'import pty;pty.spawn("bash")' # or whatever you use below to spawn a bash shell
+
+^Z # Ctrl-Z
+
+stty raw -echo
+
+fg
+```
+
 ```python
 python -c 'import pty; pty.spawn("/bin/bash")'
 ```
