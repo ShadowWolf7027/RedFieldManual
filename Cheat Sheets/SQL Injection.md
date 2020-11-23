@@ -101,3 +101,10 @@ admin") or "1"="1"/*
 
 ## SQLMap
 Documentation [here](https://github.com/sqlmapproject/sqlmap)
+
+## SQL Injection Payloads
+Check [here](https://github.com/swisskyrepo/PayloadsAllTheThings/tree/master/SQL%20Injection)
+
+## NoSQL Injection Payloads
+
+Check [here](https://github.com/swisskyrepo/PayloadsAllTheThings/tree/master/NoSQL%20Injection)
